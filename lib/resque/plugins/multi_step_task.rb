@@ -66,7 +66,6 @@ module Resque
           mst = new(task_id)
           mst.nuke
           redis.sadd("active-tasks", task_id)
-          redis.sismember("active-tasks", task_id)
           if block_given?
             yield mst
             mst.finalizable!
@@ -193,6 +192,7 @@ module Resque
         redis.keys('*').each{|k| redis.del k}
         Resque.remove_queue queue_name
         self.class.redis.srem('active-tasks', task_id)
+        self.class.redis.srem('finalizable-tasks', task_id)
       end
       
       # The name of the queue for jobs what are part of this task.
@@ -231,12 +231,12 @@ module Resque
       # executed until the task becomes finalizable regardless of the
       # number of jobs that have been completed.
       def finalizable?
-        redis.exists 'is_finalizable'
+        redis.sismember 'finalizable-tasks', task_id
       end
 
       # Make this multi-step task finalizable (see #finalizable?).
       def finalizable!
-        redis.set 'is_finalizable', true
+        redis.sadd 'finalizable-tasks', task_id
         if synchronous?
           maybe_finalize
         else
