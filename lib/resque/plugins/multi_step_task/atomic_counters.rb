@@ -5,13 +5,17 @@ module Resque
         def counter(name)
           class_eval <<-INCR
             def increment_#{name}
-              redis.incrby('#{name}', 1)
+              retryable(:tries => 5, :on => [TimeoutError, Errno::EAGAIN]) do
+                redis.incr('#{name}')
+              end
             end
             INCR
 
           class_eval <<-GETTER
             def #{name}
-              redis.get('#{name}').to_i
+              retryable(:tries => 5, :on => [TimeoutError, Errno::EAGAIN]) do
+                redis.get('#{name}').to_i
+              end
             end
             GETTER
         end

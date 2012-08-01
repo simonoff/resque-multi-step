@@ -1,11 +1,13 @@
 require 'resque'
 require 'redis-namespace'
+require 'retryable'
 require 'resque/plugins/multi_step_task/assure_finalization'
 require 'resque/plugins/multi_step_task/finalization_job'
 require 'resque/plugins/multi_step_task/constantization'
 require 'resque/plugins/multi_step_task/atomic_counters'
 require 'logger'
 require 'yajl'
+
 
 module Resque
   module Plugins
@@ -66,7 +68,6 @@ module Resque
           mst = new(task_id)
           mst.nuke
           redis.sadd("active-tasks", task_id)
-          redis.sismember("active-tasks", task_id)
           if block_given?
             yield mst
             mst.finalizable!
@@ -197,6 +198,7 @@ module Resque
         redis.keys('*').each{|k| redis.del k}
         Resque.remove_queue queue_name
         self.class.redis.srem('active-tasks', task_id)
+        self.class.redis.srem('finalizable-tasks', task_id)
       end
       
       # The name of the queue for jobs what are part of this task.
@@ -235,12 +237,12 @@ module Resque
       # executed until the task becomes finalizable regardless of the
       # number of jobs that have been completed.
       def finalizable?
-        redis.exists 'is_finalizable'
+        redis.sismember 'finalizable-tasks', task_id
       end
 
       # Make this multi-step task finalizable (see #finalizable?).
       def finalizable!
-        redis.set 'is_finalizable', true
+        redis.sadd 'finalizable-tasks', task_id
         if synchronous?
           maybe_finalize
         else

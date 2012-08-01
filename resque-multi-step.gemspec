@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    "Gemfile",
     "History.txt",
     "LICENSE",
     "README.md",
@@ -49,24 +50,51 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<rake>, ["~> 0.9.2.2"])
+      s.add_runtime_dependency(%q<redis-namespace>, ["~> 1.0.2"])
+      s.add_runtime_dependency(%q<yajl-ruby>, ["~> 1.1.0"])
+      s.add_runtime_dependency(%q<resque>, ["~> 1.20.0"])
+      s.add_runtime_dependency(%q<resque-fairly>, ["~> 1.1.0"])
+      s.add_runtime_dependency(%q<retryable>, ["~> 1.2.5"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.7"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_runtime_dependency(%q<redis-namespace>, [">= 0"])
       s.add_runtime_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_runtime_dependency(%q<resque>, [">= 0"])
       s.add_runtime_dependency(%q<resque-fairly>, [">= 0"])
+      s.add_runtime_dependency(%q<retryable>, [">= 0"])
     else
+      s.add_dependency(%q<rake>, ["~> 0.9.2.2"])
+      s.add_dependency(%q<redis-namespace>, ["~> 1.0.2"])
+      s.add_dependency(%q<yajl-ruby>, ["~> 1.1.0"])
+      s.add_dependency(%q<resque>, ["~> 1.20.0"])
+      s.add_dependency(%q<resque-fairly>, ["~> 1.1.0"])
+      s.add_dependency(%q<retryable>, ["~> 1.2.5"])
+      s.add_dependency(%q<rspec>, ["~> 2.7"])
+      s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<redis-namespace>, [">= 0"])
       s.add_dependency(%q<yajl-ruby>, [">= 0"])
       s.add_dependency(%q<resque>, [">= 0"])
       s.add_dependency(%q<resque-fairly>, [">= 0"])
+      s.add_dependency(%q<retryable>, [">= 0"])
     end
   else
+    s.add_dependency(%q<rake>, ["~> 0.9.2.2"])
+    s.add_dependency(%q<redis-namespace>, ["~> 1.0.2"])
+    s.add_dependency(%q<yajl-ruby>, ["~> 1.1.0"])
+    s.add_dependency(%q<resque>, ["~> 1.20.0"])
+    s.add_dependency(%q<resque-fairly>, ["~> 1.1.0"])
+    s.add_dependency(%q<retryable>, ["~> 1.2.5"])
+    s.add_dependency(%q<rspec>, ["~> 2.7"])
+    s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<redis-namespace>, [">= 0"])
     s.add_dependency(%q<yajl-ruby>, [">= 0"])
     s.add_dependency(%q<resque>, [">= 0"])
     s.add_dependency(%q<resque-fairly>, [">= 0"])
+    s.add_dependency(%q<retryable>, [">= 0"])
   end
 end
 

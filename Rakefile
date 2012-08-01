@@ -17,6 +17,7 @@ begin
     gem.add_dependency 'yajl-ruby'
     gem.add_dependency 'resque'
     gem.add_dependency 'resque-fairly'
+    gem.add_dependency 'retryable'
 
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
@@ -31,7 +32,7 @@ RSpec::Core::RakeTask.new(:spec)
 
 task :default => :spec
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 

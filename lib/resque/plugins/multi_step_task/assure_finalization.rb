@@ -8,6 +8,8 @@ module Resque
       class AssureFinalization
         def self.perform(task_id)
           MultiStepTask.find(task_id).maybe_finalize
+        rescue NoSuchMultiStepTask
+          # Eat the exception, finalization has already occurred via a normal job
         end
       end
     end
