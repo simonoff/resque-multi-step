@@ -27,7 +27,7 @@ module Resque
 
       class << self
         include Constantization
-        
+
         NONCE_CHARS = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
 
         # A bit of randomness to ensure tasks are uniquely identified.
@@ -36,7 +36,7 @@ module Resque
           5.times{nonce << NONCE_CHARS[rand(NONCE_CHARS.length)]}
           nonce
         end
-        
+
         # A redis client suitable for storing global mutli-step task info.
         def redis
           @redis ||= Redis::Namespace.new("resque:multisteptask", :redis => Resque.redis)
@@ -46,7 +46,7 @@ module Resque
         def active?(task_id)
           redis.sismember("active-tasks", task_id)
         end
-        
+
         # Create a brand new multi-step-task.
         #
         # @param [#to_s] slug The descriptive slug of the new job.  Default: a
@@ -59,12 +59,12 @@ module Resque
         # @return [MultiStepTask] The new job group
         def create(slug=nil)
           task_id = if slug.nil? || slug.empty?
-                      "multi-step-task" 
+                      "multi-step-task"
                     else
                       slug.to_s
                     end
           task_id << "~" << nonce
-          
+
           mst = new(task_id)
           mst.nuke
           redis.sadd("active-tasks", task_id)
@@ -72,13 +72,13 @@ module Resque
             yield mst
             mst.finalizable!
           end
-          
+
           mst
         end
 
         # Prevent calling MultiStepTask.new
         private :new
-        
+
         # Find an existing MultiStepTask.
         #
         # @param [#to_s] task_id The unique key for the job group of interest.
@@ -88,7 +88,7 @@ module Resque
         # @raise [NoSuchMultiStepTask] If there is not a group with the specified key.
         def find(task_id)
           raise NoSuchMultiStepTask unless active?(task_id)
-          
+
           mst = new(task_id)
         end
 
@@ -105,8 +105,8 @@ module Resque
             logger.debug("[Resque Multi-Step-Task] Executing #{job_module_name} job for #{task_id} at #{start_time} (args: #{args})")
             # perform the task
             klass = constantize(job_module_name)
-            klass.singleton_class.class_eval "def multi_step_task; @@task ||= MultiStepTask.find('#{task_id}'); end"
-            klass.singleton_class.class_eval "def multi_step_task_id; @@task_id ||= '#{task_id}'; end"
+            klass.singleton_class.class_eval "def multi_step_task; @_multi_step_task ||= MultiStepTask.find('#{task_id}'); end"
+            klass.singleton_class.class_eval "def multi_step_task_id; '#{task_id}'; end"
 
             klass.perform(*args)
 
@@ -116,6 +116,10 @@ module Resque
             logger.error("[Resque Multi-Step-Task] #{e.backtrace.join("\n")}")
             task.increment_failed_count
             raise
+          ensure
+            if klass.instance_variable_defined?(:@_multi_step_task)
+              klass.instance_variable_set(:@_multi_step_task, nil)
+            end
           end
           task.increment_completed_count
           task
@@ -154,7 +158,7 @@ module Resque
         @@synchronous
       end
 
-      # Instance methods 
+      # Instance methods
 
       include Constantization
 
@@ -200,7 +204,7 @@ module Resque
         self.class.redis.srem('active-tasks', task_id)
         self.class.redis.srem('finalizable-tasks', task_id)
       end
-      
+
       # The name of the queue for jobs what are part of this task.
       def queue_name
         task_id
@@ -267,7 +271,7 @@ module Resque
         # process.  This setnx acts a global mutex for other processes
         # that finish about the same time.
         raise FinalizationAlreadyBegun unless redis.setnx("i_am_the_finalizer", 1)
-        
+
         if synchronous?
           sync_finalize!
         else
@@ -318,7 +322,7 @@ module Resque
       def incomplete_because_of_errors?
         failed_count > 0 && completed_count < normal_job_count
       end
-      
+
       def unfinalized_because_of_errors?
         failed_count > 0 && completed_count < (normal_job_count + finalize_job_count)
       end
