@@ -7,7 +7,7 @@ module MultiStepAcceptance
   
   class CounterJob
     def self.perform(key)
-      Resque.redis.incr key
+      Resque.redis.incr(key)
     end
   end
   

@@ -16,8 +16,6 @@ begin
     gem.add_dependency 'redis-namespace'
     gem.add_dependency 'yajl-ruby'
     gem.add_dependency 'resque'
-    gem.add_dependency 'resque-fairly'
-    gem.add_dependency 'retryable'
 
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
@@ -45,7 +43,7 @@ end
 # Setup  for acceptance testing
 require 'rubygems'
 require 'resque/tasks'
-require 'resque-fairly'
+require 'resque'
 
 Resque.redis.namespace = ENV['NAMESPACE'] if ENV['NAMESPACE']
 

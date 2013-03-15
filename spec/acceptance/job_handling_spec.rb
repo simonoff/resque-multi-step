@@ -19,7 +19,7 @@ describe "Acceptance: Successful task" do
     sleep 1
   end
 
-  it "processes its job" do 
+  it "processes its job" do
     Resque.redis.get("testing counter").to_i.should == 1
   end
 

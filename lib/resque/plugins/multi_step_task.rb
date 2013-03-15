@@ -1,6 +1,5 @@
 require 'resque'
 require 'redis-namespace'
-require 'retryable'
 require 'resque/plugins/multi_step_task/assure_finalization'
 require 'resque/plugins/multi_step_task/finalization_job'
 require 'resque/plugins/multi_step_task/constantization'

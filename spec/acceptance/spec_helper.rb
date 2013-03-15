@@ -6,7 +6,7 @@ require 'acceptance_jobs'
 $worker_pid = fork
 if $worker_pid.nil?
   # in child
-  exec "rake resque:work 'QUEUES=*' 'NAMESPACE=resque-multi-step-task-testing' INTERVAL=1 VERBOSE=1"
+  exec "rake resque:work 'QUEUES=*' 'TERM_CHILD=1' 'NAMESPACE=resque-multi-step-task-testing' INTERVAL=1 VERBOSE=1"
 end
 
 # wait for worker to come up
