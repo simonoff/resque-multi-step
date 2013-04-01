@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Peter Williams", "Morgan Whitney"]
-  s.date = "2013-03-15"
+  s.date = "2013-04-01"
   s.description = "Provides multi-step tasks with finalization and progress tracking"
   s.email = "pezra@barelyenough.org"
   s.extra_rdoc_files = [
@@ -53,7 +53,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rake>, ["~> 0.9.2.2"])
       s.add_runtime_dependency(%q<redis-namespace>, ["~> 1.2.0"])
       s.add_runtime_dependency(%q<yajl-ruby>, ["~> 1.1.0"])
-      s.add_runtime_dependency(%q<resque>, ["~> 1.23.0"])
+      s.add_runtime_dependency(%q<resque>, ["~> 1.24.0"])
       s.add_development_dependency(%q<rspec>, ["~> 2.7"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
@@ -64,7 +64,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rake>, ["~> 0.9.2.2"])
       s.add_dependency(%q<redis-namespace>, ["~> 1.2.0"])
       s.add_dependency(%q<yajl-ruby>, ["~> 1.1.0"])
-      s.add_dependency(%q<resque>, ["~> 1.23.0"])
+      s.add_dependency(%q<resque>, ["~> 1.24.0"])
       s.add_dependency(%q<rspec>, ["~> 2.7"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
       s.add_dependency(%q<rspec>, [">= 0"])
@@ -76,7 +76,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rake>, ["~> 0.9.2.2"])
     s.add_dependency(%q<redis-namespace>, ["~> 1.2.0"])
     s.add_dependency(%q<yajl-ruby>, ["~> 1.1.0"])
-    s.add_dependency(%q<resque>, ["~> 1.23.0"])
+    s.add_dependency(%q<resque>, ["~> 1.24.0"])
     s.add_dependency(%q<rspec>, ["~> 2.7"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.3"])
     s.add_dependency(%q<rspec>, [">= 0"])
